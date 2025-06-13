@@ -1,11 +1,68 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import Layout from '@/layouts/Layout.astro';
+import HeroKeyLogo from '@/assets/hero-key-logo.webp';
+import HeroKeyBackground from '@/assets/hero-key-bg.webp';
+import LogoVIIcon from '@/assets/logo-vi.svg';
+import PlayButtonIcon from '@/assets/play-button.svg';
+import LogoCutted from '@/assets/logo-cutted.svg';
+import LogoStack from '@/assets/logo-stack.svg';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
 <Layout>
-	<Welcome />
+	<div id="logo-mask" class="fixed top-0 w-full h-screen">
+		<section>	
+			<picture id="hero-key" class="h-screen scale-125 block overflow-hidden fixed">
+				<img id="hero-key-logo" src={HeroKeyLogo.src} alt="Hero Key Logo" class="absolute w-full h-full object-cover" />
+				<img id="hero-key-background" src={HeroKeyBackground.src} alt="Hero Key Background" class="w-full h-full object-cover min-h-screen" />
+			</picture>
+		</section>
+	</div>
+
+	<div class="fixed flex flex-col items-center justify-between h-screen px-18 py-15 w-full">
+		<header class="flex items-center justify-between w-full">
+			<LogoVIIcon class="size-9.5 text-white hover:text-yellow-100 cursor-pointer trainsition-colors duration-400" />
+		</header>
+		<button id="hero-play-button" class="cursor-pointer">
+			<PlayButtonIcon class="size-32 m-auto mt-36 backdrop-blur-sm rounded-full hover:scale-105 transition-transform duration-500" />
+		</button>
+		<footer id="hero-footer" class="relative">
+			<LogoCutted class="text-white w-60 drop-shadow-[0_0_4px_rgba(255,255,255,0.5),0_0_8px_#000]" />
+			<span class="absolute uppercase top-[45px] tracking-[8px] whitespace-nowrap font-bold text-2xl left-1/2 -translate-x-1/2">Watch trailer 2</span>
+		</footer>
+	</div>
 </Layout>
+
+<style>
+	#logo-mask {
+		background: white;
+		mask-image: url("./logo-stack.svg");
+		mask-position: center 25%;
+		mask-repeat: no-repeat;
+		mask-size: clamp(5000vh, 3500%, 0vh);
+	}
+</style>
+
+<script>
+	import { gsap } from "gsap";
+	import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+	gsap.registerPlugin(ScrollTrigger);
+
+	const tl = gsap.timeline({
+		ease: "power2.out",
+		scrollTrigger: {
+			scrub: 1,
+		}
+	})
+
+	tl.to("#hero-key", { scale: 1, duration: 0.5 })
+	  .to("#hero-key-logo", { opacity: 0 }, "<")
+	  .to("#hero-footer", { opacity: 0 }, "<")
+	  .to("#hero-play-button", { opacity: 0 }, "<")
+	  .to("#logo-mask", { maskSize: "clamp(20vh, 25%, 30vh)"}, 0.1)
+	  .to("#hero-key", { opacity: 0 }, 0.4)
+
+
+
+</script>
